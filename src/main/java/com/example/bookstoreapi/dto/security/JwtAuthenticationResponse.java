@@ -15,6 +15,7 @@ public class JwtAuthenticationResponse {
     String accessToken;
     String refreshToken;
     Long userId;
+    String message;
 }
 
 

@@ -1,5 +1,6 @@
 package com.example.bookstoreapi.security;
 
+import com.example.bookstoreapi.config.exceptions.EmailNotFoundException;
 import com.example.bookstoreapi.dto.security.UserPrincipal;
 import com.example.bookstoreapi.model.User;
 import com.example.bookstoreapi.repository.AuthRepository;
@@ -31,8 +32,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new NullPointerException("User with email " + email + " not found"));
-        //TODO add custom exception and handle it
+                .orElseThrow(() -> new EmailNotFoundException("User with email " + email + " not found"));
         return UserPrincipal.create(user);
     }
 }

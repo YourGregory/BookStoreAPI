@@ -49,28 +49,37 @@ public class AuthService {
         User user = requestToUserMapper.toUser(request);
         user.setRole(Role.CLIENT);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        System.out.println(user.getEmail());
+
         authRepository.save(user);
     }
 
     @Transactional
     public JwtAuthenticationResponse authenticateUser(LoginRequest request) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        System.out.println("here1");
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        Long userId = userPrincipal.getId();
-        String accessToken = createAccessToken(authentication);
-        String refreshToken = createRefreshToken(authentication);
-        System.out.println(accessToken);
-        System.out.println(refreshToken);
-        System.out.println("here1");
-        return new JwtAuthenticationResponse(accessToken, refreshToken, userId);
+        try {
+
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+            Long userId = userPrincipal.getId();
+
+            String accessToken = createAccessToken(authentication);
+            String refreshToken = createRefreshToken(authentication);
+
+            System.out.println(accessToken);
+            System.out.println(refreshToken);
+
+            return new JwtAuthenticationResponse(accessToken, refreshToken, userId, "");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new JwtAuthenticationResponse(null, null, null, e.getMessage());
+        }
     }
 
     public String createAccessToken(Authentication authentication) {
