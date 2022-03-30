@@ -20,7 +20,7 @@ public class LoginRequest {
     String email;
 
     @NotBlank
-    @Size(min = 4, max = 30)
+    @Size(min = 4)
     String password;
 
 }

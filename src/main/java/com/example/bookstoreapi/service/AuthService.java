@@ -12,6 +12,7 @@ import com.example.bookstoreapi.repository.AuthRepository;
 import com.example.bookstoreapi.security.JwtTokenProvider;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import lombok.experimental.FieldDefaults;
 import org.springframework.transaction.annotation.Transactional;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
@@ -32,7 +34,7 @@ public class AuthService {
     AuthenticationManager authenticationManager;
     PasswordEncoder passwordEncoder;
     JwtTokenProvider tokenProvider;
-    private final PropertiesConfig.JwtProperties properties;
+    PropertiesConfig.JwtProperties properties;
 
     @Transactional(readOnly = true)
     public Boolean existsByUsername(String name) {
@@ -72,12 +74,12 @@ public class AuthService {
             String accessToken = createAccessToken(authentication);
             String refreshToken = createRefreshToken(authentication);
 
-            System.out.println(accessToken);
-            System.out.println(refreshToken);
+            log.info(accessToken);
+            log.info(refreshToken);
 
             return new JwtAuthenticationResponse(accessToken, refreshToken, userId, "");
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            log.info(e.getMessage());
             return new JwtAuthenticationResponse(null, null, null, e.getMessage());
         }
     }

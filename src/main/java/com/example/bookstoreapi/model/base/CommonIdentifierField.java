@@ -14,13 +14,13 @@ import javax.persistence.MappedSuperclass;
  */
 @MappedSuperclass
 @ToString
+@Getter
+@Setter
 public abstract class CommonIdentifierField {
     /**
      * Common id field.
      */
     @Id
-    @Getter
-    @Setter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 }

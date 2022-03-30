@@ -14,15 +14,15 @@ import javax.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.FieldDefaults;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
 @Entity
 @Table(name = "users")
-@FieldDefaults(makeFinal = false, level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class User extends CommonIdentifierField {
 
-    @Column(nullable = false, length = 40, unique = true)
+    @Column(nullable = false, length = 100, unique = true)
     String name;
 
     @Column(nullable = false, length = 50, unique = true)

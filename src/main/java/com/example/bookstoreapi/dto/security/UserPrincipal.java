@@ -26,7 +26,6 @@ public class UserPrincipal implements UserDetails {
 
     Long id;
     String username;
-
     String email;
 
     @JsonIgnore
